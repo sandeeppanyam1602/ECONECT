@@ -709,3 +709,38 @@ def approve_user(
     db.add(AuditLog(actor_id=admin.id, action="VERIFY_USER", target_id=u.id, details=f"Approved {u.email}"))
     db.commit()
     return {"message": "User verified", "badge_id": u.econect_badge_id}
+
+# ---------------------------------------------------------
+# Static file serving for single-service full-stack deployment
+# ---------------------------------------------------------
+import os
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+
+_possible_dirs = [
+    os.path.join(os.path.dirname(__file__), "..", "..", "dist"),
+    os.path.join(os.getcwd(), "dist"),
+]
+dist_dir = next((d for d in _possible_dirs if os.path.exists(d) and os.path.isdir(d)), None)
+
+if dist_dir:
+    assets_dir = os.path.join(dist_dir, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/{full_path:path}")
+    def serve_frontend_spa(full_path: str):
+        api_prefixes = (
+            "auth", "prices", "pickups", "waste", "centres",
+            "recyclers", "admin", "ai", "docs", "redoc", "openapi.json"
+        )
+        if any(full_path == p or full_path.startswith(f"{p}/") for p in api_prefixes):
+            raise HTTPException(status_code=404, detail="Not Found")
+
+        file_path = os.path.join(dist_dir, full_path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        index_file = os.path.join(dist_dir, "index.html")
+        if os.path.exists(index_file):
+            return FileResponse(index_file)
+        raise HTTPException(status_code=404, detail="Frontend build index.html not found")
