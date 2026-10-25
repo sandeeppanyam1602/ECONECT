@@ -1,0 +1,28 @@
+# Frontend dependencies & builds
+node_modules/
+dist/
+.vite/
+
+# Environment variables & secrets (NEVER COMMIT)
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Python Backend virtual environments & cache
+backend/venv/
+backend/.venv/
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Local development databases
+*.db
+*.sqlite3
+
+# OS / Editor files
+.DS_Store
+Thumbs.db

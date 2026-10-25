@@ -1,0 +1,10 @@
+{
+  "description": "This mobile app offers users an intuitive experience with a modern interface, allowing easy navigation and access to core features while delivering engaging content.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
