@@ -1,6 +1,6 @@
 # Frontend dependencies & builds
 node_modules/
-dist/
+# dist/ (tracked for zero-setup Render deployment)
 .vite/
 
 # Environment variables & secrets (NEVER COMMIT)
