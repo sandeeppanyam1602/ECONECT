@@ -1,0 +1,8 @@
+#!/bin/sh
+if command -v node >/dev/null 2>&1; then
+  exec node server.js
+elif command -v uvicorn >/dev/null 2>&1; then
+  exec uvicorn main:app --host 0.0.0.0 --port "${PORT:-10000}"
+else
+  exec python main.py
+fi
